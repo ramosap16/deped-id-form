@@ -41,7 +41,7 @@ function closeDisclaimer() {
 
 // ── Configuration ────────────────────────────────────────────
 // Replace this with your deployed Google Apps Script Web App URL
-const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzeCL0JrBU1SDn2VfEQW8lA5kOdwPboS36H056sjV8tNVQ6QRKBct5e3-lnm0ofQoFt/exec';
 
 // ── File validation rules ────────────────────────────────────
 // Raw file size cap before compression. Images are compressed
