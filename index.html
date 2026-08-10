@@ -60,19 +60,18 @@
               <span class="field-error" id="err-firstName"></span>
             </div>
             <div class="form-group">
-              <label for="middleName">Middle Initial</label>
-              <input type="text" id="middleName" name="middleName" placeholder="e.g. P." autocomplete="additional-name" />
+              <label for="middleName">Middle Name</label>
+              <input type="text" id="middleName" name="middleName" placeholder="e.g. Santos" autocomplete="additional-name" />
             </div>
           </div>
 
           <div class="form-row two-col">
             <div class="form-group">
-              <label for="address">Address <span class="required-star">*</span></label>
+              <label for="address">Address</label>
               <input type="text" id="address" name="address" placeholder="e.g. 123 Rizal St., Manila" autocomplete="street-address" />
-              <span class="field-error" id="err-address"></span>
             </div>
             <div class="form-group">
-              <label for="contactNumber">Contact No. <span class="required-star">*</span></label>
+              <label for="contactNumber">Contact No.</label>
               <input type="tel" id="contactNumber" name="contactNumber" placeholder="e.g. 09171234567" maxlength="11" autocomplete="tel" />
               <span class="field-error" id="err-contactNumber"></span>
             </div>
@@ -85,7 +84,7 @@
               <span class="field-error" id="err-dateOfBirth"></span>
             </div>
             <div class="form-group">
-              <label for="bloodType">Blood Type <span class="required-star">*</span></label>
+              <label for="bloodType">Blood Type</label>
               <select id="bloodType" name="bloodType">
                 <option value="">— Select —</option>
                 <option value="A+">A+</option>
@@ -97,7 +96,6 @@
                 <option value="O+">O+</option>
                 <option value="O-">O-</option>
               </select>
-              <span class="field-error" id="err-bloodType"></span>
             </div>
             <div class="form-group">
               <label for="tin">TIN</label>
@@ -146,9 +144,8 @@
               <span class="field-error" id="err-schoolName"></span>
             </div>
             <div class="form-group">
-              <label for="schoolAddress">School Address <span class="required-star">*</span></label>
+              <label for="schoolAddress">School Address</label>
               <input type="text" id="schoolAddress" name="schoolAddress" placeholder="e.g. 123 Rizal St., Manila" />
-              <span class="field-error" id="err-schoolAddress"></span>
             </div>
           </div>
 
@@ -192,14 +189,12 @@
 
           <div class="form-row two-col">
             <div class="form-group">
-              <label for="schoolHeadName">Name of School Head <span class="required-star">*</span></label>
+              <label for="schoolHeadName">Name of School Head</label>
               <input type="text" id="schoolHeadName" name="schoolHeadName" placeholder="e.g. Maria Santos" />
-              <span class="field-error" id="err-schoolHeadName"></span>
             </div>
             <div class="form-group">
-              <label for="schoolHeadPosition">Position <span class="required-star">*</span></label>
+              <label for="schoolHeadPosition">Position</label>
               <input type="text" id="schoolHeadPosition" name="schoolHeadPosition" placeholder="e.g. Principal I" />
-              <span class="field-error" id="err-schoolHeadPosition"></span>
             </div>
           </div>
 
@@ -211,20 +206,18 @@
 
           <div class="form-row one-col">
             <div class="form-group">
-              <label for="emergencyName">Name <span class="required-star">*</span></label>
+              <label for="emergencyName">Name</label>
               <input type="text" id="emergencyName" name="emergencyName" placeholder="e.g. Maria Dela Cruz" />
-              <span class="field-error" id="err-emergencyName"></span>
             </div>
           </div>
 
           <div class="form-row two-col">
             <div class="form-group">
-              <label for="emergencyAddress">Address <span class="required-star">*</span></label>
+              <label for="emergencyAddress">Address</label>
               <input type="text" id="emergencyAddress" name="emergencyAddress" placeholder="e.g. 456 Mabini St., Manila" />
-              <span class="field-error" id="err-emergencyAddress"></span>
             </div>
             <div class="form-group">
-              <label for="emergencyContact">Contact Number <span class="required-star">*</span></label>
+              <label for="emergencyContact">Contact Number</label>
               <input type="tel" id="emergencyContact" name="emergencyContact" placeholder="e.g. 09181234567" maxlength="11" />
               <span class="field-error" id="err-emergencyContact"></span>
             </div>
@@ -238,14 +231,14 @@
 
           <!-- ID Photo -->
           <div class="form-group upload-group">
-            <label for="idPhoto">ID Photo <span class="required-star">*</span></label>
-            <p class="field-hint">Upload a clear, recent photo. Accepted formats: JPG, PNG. Max size: 5MB.</p>
+            <label for="idPhoto">ID Photo <span class="optional-tag">(Optional)</span></label>
+            <p class="field-hint">Upload a clear, recent photo. Accepted formats: JPG, PNG. Max size: 10MB.</p>
             <div class="upload-area" id="upload-area-photo">
               <input type="file" id="idPhoto" name="idPhoto" accept=".jpg,.jpeg,.png" class="file-input" />
               <label for="idPhoto" class="upload-label">
                 <span class="upload-icon">📷</span>
                 <span class="upload-text">Click to upload ID photo</span>
-                <span class="upload-sub">JPG or PNG, max 5MB</span>
+                <span class="upload-sub">JPG or PNG, max 10MB</span>
               </label>
             </div>
             <div id="photo-preview-wrap" class="photo-preview-wrap hidden">
@@ -257,14 +250,14 @@
 
           <!-- E-Signature -->
           <div class="form-group upload-group">
-            <label for="esignature">E-Signature <span class="required-star">*</span></label>
-            <p class="field-hint">Upload your signature on a white background. Accepted formats: JPG, PNG. Max size: 5MB.</p>
+            <label for="esignature">E-Signature <span class="optional-tag">(Optional)</span></label>
+            <p class="field-hint">Upload your signature on a white background. Accepted formats: JPG, PNG. Max size: 10MB.</p>
             <div class="upload-area" id="upload-area-esig">
               <input type="file" id="esignature" name="esignature" accept=".jpg,.jpeg,.png" class="file-input" />
               <label for="esignature" class="upload-label">
                 <span class="upload-icon">✍️</span>
                 <span class="upload-text">Click to upload e-signature</span>
-                <span class="upload-sub">JPG or PNG, max 5MB</span>
+                <span class="upload-sub">JPG or PNG, max 10MB</span>
               </label>
             </div>
             <div id="esig-preview-wrap" class="photo-preview-wrap hidden">
@@ -277,13 +270,13 @@
           <!-- Supporting Document -->
           <div class="form-group upload-group">
             <label for="supportingDoc1">Supporting Document <span class="optional-tag">(Optional)</span></label>
-            <p class="field-hint">Accepted formats: JPG, PNG, PDF. Max size: 5MB.</p>
+            <p class="field-hint">Accepted formats: JPG, PNG, PDF. Max size: 10MB.</p>
             <div class="upload-area" id="upload-area-doc1">
               <input type="file" id="supportingDoc1" name="supportingDoc1" accept=".jpg,.jpeg,.png,.pdf" class="file-input" />
               <label for="supportingDoc1" class="upload-label">
                 <span class="upload-icon">📄</span>
                 <span class="upload-text">Click to upload document</span>
-                <span class="upload-sub">JPG, PNG, or PDF, max 5MB</span>
+                <span class="upload-sub">JPG, PNG, or PDF, max 10MB</span>
               </label>
             </div>
             <div id="doc1-name-wrap" class="file-name-wrap hidden">
@@ -313,6 +306,67 @@
       <p>DPrints by Dylan &copy; 2026.</p>
     </footer>
 
+  </div>
+
+  <!-- Disclaimer Modal -->
+  <div id="disclaimer-overlay" class="disclaimer-overlay" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title">
+    <div class="disclaimer-modal">
+
+      <div class="disclaimer-header">
+        <div class="disclaimer-header-inner">
+          <span class="disclaimer-badge">DPrints by Dylan</span>
+          <h2 id="disclaimer-title">Terms &amp; Disclaimer</h2>
+          <p class="disclaimer-subtitle">Please read carefully before proceeding.</p>
+        </div>
+      </div>
+
+      <div class="disclaimer-body" id="disclaimer-body">
+
+        <div class="disclaimer-section">
+          <h3>1. Purpose of this Form</h3>
+          <p>This form is used exclusively to collect information needed to process and print DepEd employee ID cards. Submitted data will be used solely for ID production and order fulfillment by <strong>DPrints by Dylan</strong>.</p>
+        </div>
+
+        <div class="disclaimer-section">
+          <h3>2. Data Privacy</h3>
+          <p>By submitting this form, you acknowledge and consent to the collection, use, and storage of your personal information in accordance with the <strong>Republic Act No. 10173 (Data Privacy Act of 2012)</strong>. Your data will not be shared with third parties without your consent, except as required by law or for the purpose of processing your ID order.</p>
+        </div>
+
+        <div class="disclaimer-section">
+          <h3>3. Accuracy of Information</h3>
+          <p>You are responsible for ensuring that all information provided is accurate, complete, and up to date. <strong>DPrints by Dylan</strong> will not be liable for errors on the printed ID resulting from incorrect or incomplete submissions. Reprinting due to customer-provided errors may incur additional fees.</p>
+        </div>
+
+        <div class="disclaimer-section">
+          <h3>4. Photo &amp; Signature Guidelines</h3>
+          <p>Uploaded photos must be clear, recent, and show the employee's face without obstructions. E-signatures must be on a clean white background. Submissions that do not meet quality standards may be returned for re-upload, which could delay processing.</p>
+        </div>
+
+        <div class="disclaimer-section">
+          <h3>5. Processing &amp; Delivery</h3>
+          <p>Processing times are subject to order volume and may vary. Delivery timelines depend on the selected shipping method and courier. <strong>DPrints by Dylan</strong> is not responsible for delays caused by third-party courier services.</p>
+        </div>
+
+        <div class="disclaimer-section">
+          <h3>6. No Affiliation with DepEd</h3>
+          <p><strong>DPrints by Dylan</strong> is an independent printing service provider and is not affiliated with, endorsed by, or an official agent of the Department of Education (DepEd). This form is a private ordering tool and does not constitute an official government transaction.</p>
+        </div>
+
+        <div class="disclaimer-section">
+          <h3>7. Acceptance</h3>
+          <p>By clicking <strong>"I Agree &amp; Continue"</strong> below, you confirm that you have read, understood, and agreed to these terms and the privacy notice above.</p>
+        </div>
+
+      </div>
+
+      <div class="disclaimer-footer">
+        <p id="disclaimer-scroll-hint" class="disclaimer-scroll-hint">↓ Scroll down to read the full disclaimer</p>
+        <button id="disclaimer-agree-btn" class="btn-primary disclaimer-agree-btn" disabled onclick="closeDisclaimer()">
+          I Agree &amp; Continue
+        </button>
+      </div>
+
+    </div>
   </div>
 
   <script src="script.js"></script>

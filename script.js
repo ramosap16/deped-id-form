@@ -3,15 +3,103 @@
    DPrints by Dylan
    ============================================================ */
 
+// ── Disclaimer modal ─────────────────────────────────────────
+(function () {
+  const overlay   = document.getElementById('disclaimer-overlay');
+  const body      = document.getElementById('disclaimer-body');
+  const agreeBtn  = document.getElementById('disclaimer-agree-btn');
+  const scrollHint = document.getElementById('disclaimer-scroll-hint');
+
+  // Lock page scroll while modal is visible
+  document.body.classList.add('disclaimer-open');
+
+  // Enable the agree button only after the user scrolls to the bottom
+  function checkScroll() {
+    const threshold = 40; // px from bottom
+    const atBottom  = body.scrollHeight - body.scrollTop - body.clientHeight <= threshold;
+    if (atBottom) {
+      agreeBtn.disabled = false;
+      scrollHint.classList.add('hidden-hint');
+      body.removeEventListener('scroll', checkScroll);
+    }
+  }
+
+  // Also enable immediately if content fits without scrolling
+  if (body.scrollHeight <= body.clientHeight) {
+    agreeBtn.disabled = false;
+    scrollHint.classList.add('hidden-hint');
+  } else {
+    body.addEventListener('scroll', checkScroll);
+  }
+})();
+
+function closeDisclaimer() {
+  const overlay = document.getElementById('disclaimer-overlay');
+  overlay.classList.add('hidden');
+  document.body.classList.remove('disclaimer-open');
+}
+
 // ── Configuration ────────────────────────────────────────────
 // Replace this with your deployed Google Apps Script Web App URL
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzKjuGNuvfC184p_-RGY2WiyRrNGRmO9EEJ7OBKhI7fIW2cLrdMQ1I_LeiYbzVTjOSl/exec';
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL_HERE';
 
 // ── File validation rules ────────────────────────────────────
-const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+// Raw file size cap before compression. Images are compressed
+// client-side before upload, so the actual payload will be smaller.
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB raw input
 const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
 const ALLOWED_DOC_TYPES   = ['image/jpeg', 'image/png', 'application/pdf'];
 
+// ── Image compression settings ───────────────────────────────
+// Images are resized to fit within MAX_IMAGE_DIMENSION and re-encoded
+// as JPEG at IMAGE_QUALITY before being base64-encoded for upload.
+// This keeps payloads well within Apps Script's POST body limit.
+const MAX_IMAGE_DIMENSION = 1600; // px — enough for a crisp ID photo
+const IMAGE_QUALITY       = 0.82; // 0–1 JPEG quality
+
+// ── Compress an image File via canvas ───────────────────────
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+
+    img.onload = function () {
+      URL.revokeObjectURL(url);
+
+      let { width, height } = img;
+
+      // Scale down if either dimension exceeds the max
+      if (width > MAX_IMAGE_DIMENSION || height > MAX_IMAGE_DIMENSION) {
+        if (width >= height) {
+          height = Math.round((height / width) * MAX_IMAGE_DIMENSION);
+          width  = MAX_IMAGE_DIMENSION;
+        } else {
+          width  = Math.round((width / height) * MAX_IMAGE_DIMENSION);
+          height = MAX_IMAGE_DIMENSION;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width  = width;
+      canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+      // toBlob is async and more memory-efficient than toDataURL
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) { reject(new Error('Canvas compression failed.')); return; }
+          // Return a File so the rest of the pipeline (name, type) stays intact
+          resolve(new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' }));
+        },
+        'image/jpeg',
+        IMAGE_QUALITY
+      );
+    };
+
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Could not load image.')); };
+    img.src = url;
+  });
+}
 // ── DOM references ───────────────────────────────────────────
 const form          = document.getElementById('order-form');
 const submitBtn     = document.getElementById('submit-btn');
@@ -113,30 +201,21 @@ function validateFile(file, allowedTypes) {
     return `Invalid file type. Allowed: ${labels}.`;
   }
   if (file.size > MAX_FILE_SIZE_BYTES) {
-    return 'File exceeds the 5MB size limit.';
+    return 'File exceeds the 10MB size limit.';
   }
   return null;
 }
 
 // ── Required fields list ─────────────────────────────────────
 const REQUIRED_FIELDS = [
-  { id: 'lastName',            label: 'Last Name' },
-  { id: 'firstName',           label: 'First Name' },
-  { id: 'address',             label: 'Address' },
-  { id: 'contactNumber',       label: 'Contact No.' },
-  { id: 'dateOfBirth',         label: 'Date of Birth' },
-  { id: 'bloodType',           label: 'Blood Type' },
-  { id: 'employeeId',          label: 'Employee Number' },
-  { id: 'position',            label: 'Position' },
-  { id: 'schoolName',          label: 'Name of School' },
-  { id: 'schoolAddress',       label: 'School Address' },
-  { id: 'division',            label: 'Schools Division of' },
-  { id: 'region',              label: 'Region' },
-  { id: 'schoolHeadName',      label: 'Name of School Head' },
-  { id: 'schoolHeadPosition',  label: 'School Head Position' },
-  { id: 'emergencyName',       label: 'Emergency Contact Name' },
-  { id: 'emergencyAddress',    label: 'Emergency Contact Address' },
-  { id: 'emergencyContact',    label: 'Emergency Contact Number' },
+  { id: 'lastName',   label: 'Last Name' },
+  { id: 'firstName',  label: 'First Name' },
+  { id: 'dateOfBirth', label: 'Date of Birth' },
+  { id: 'employeeId', label: 'Employee Number' },
+  { id: 'position',   label: 'Position' },
+  { id: 'schoolName', label: 'Name of School' },
+  { id: 'division',   label: 'Schools Division of' },
+  { id: 'region',     label: 'Region' },
 ];
 
 // ── Form validation ──────────────────────────────────────────
@@ -167,36 +246,6 @@ function validateForm() {
     isValid = false;
   }
 
-  // Contact number — 11 digits
-  const contactEl = document.getElementById('contactNumber');
-  if (contactEl.value.trim() && !/^\d{11}$/.test(contactEl.value.trim())) {
-    showError(document.getElementById('err-contactNumber'), 'Contact number must be exactly 11 digits.');
-    contactEl.classList.add('invalid');
-    isValid = false;
-  }
-
-  // Emergency contact number — 11 digits
-  const emergencyContactEl = document.getElementById('emergencyContact');
-  if (emergencyContactEl.value.trim() && !/^\d{11}$/.test(emergencyContactEl.value.trim())) {
-    showError(document.getElementById('err-emergencyContact'), 'Contact number must be exactly 11 digits.');
-    emergencyContactEl.classList.add('invalid');
-    isValid = false;
-  }
-
-  // ID photo — required
-  const idPhotoInput = document.getElementById('idPhoto');
-  if (!idPhotoInput.files || idPhotoInput.files.length === 0) {
-    showError(document.getElementById('err-idPhoto'), 'ID photo is required.');
-    isValid = false;
-  }
-
-  // E-signature — required
-  const esigInput = document.getElementById('esignature');
-  if (!esigInput.files || esigInput.files.length === 0) {
-    showError(document.getElementById('err-esignature'), 'E-Signature is required.');
-    isValid = false;
-  }
-
   return isValid;
 }
 
@@ -212,16 +261,7 @@ REQUIRED_FIELDS.forEach(({ id }) => {
     el.classList.remove('invalid');
     el.classList.add('valid');
 
-    if (id === 'contactNumber' && !/^\d{11}$/.test(el.value.trim())) {
-      showError(errorEl, 'Contact number must be exactly 11 digits.');
-      el.classList.add('invalid');
-      el.classList.remove('valid');
-    }
-    if (id === 'emergencyContact' && !/^\d{11}$/.test(el.value.trim())) {
-      showError(errorEl, 'Contact number must be exactly 11 digits.');
-      el.classList.add('invalid');
-      el.classList.remove('valid');
-    }
+    if (id === 'contactNumber' || id === 'emergencyContact') return;
   });
 
   el.addEventListener('input', () => {
@@ -265,17 +305,27 @@ async function buildPayload() {
     if (el) params.append(id, el.value.trim());
   });
 
-  // Encode file fields
+  // Encode file fields — images are compressed before encoding
   const fileFields = [
-    { id: 'idPhoto',        name: 'idPhoto' },
-    { id: 'esignature',     name: 'esignature' },
-    { id: 'supportingDoc1', name: 'supportingDoc1' },
+    { id: 'idPhoto',        name: 'idPhoto',        isImage: true  },
+    { id: 'esignature',     name: 'esignature',     isImage: true  },
+    { id: 'supportingDoc1', name: 'supportingDoc1', isImage: false },
   ];
 
-  for (const { id, name } of fileFields) {
+  for (const { id, name, isImage } of fileFields) {
     const input = document.getElementById(id);
     if (input && input.files && input.files[0]) {
-      const file   = input.files[0];
+      let file = input.files[0];
+
+      // Compress images before encoding to keep payload size manageable
+      if (isImage && ALLOWED_IMAGE_TYPES.includes(file.type)) {
+        try {
+          file = await compressImage(file);
+        } catch (err) {
+          console.warn(`Compression failed for ${id}, using original:`, err);
+        }
+      }
+
       const base64 = await fileToBase64(file);
       params.append(name,                  base64);
       params.append(name + '_filename',    file.name);
